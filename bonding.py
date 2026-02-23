@@ -125,7 +125,7 @@ def filter_by_orientation(candidates, cylinders):
     return filtered
 
 
-def resolve_conflicts(candidates, max_bonds=None):
+def resolve_conflicts(candidates, max_bonds=None, existing_pairs=None):
     """
     Greedily assign bonds so each reactive site participates in at most one
 
@@ -143,17 +143,24 @@ def resolve_conflicts(candidates, max_bonds=None):
     """
     sorted_candidates = sorted(candidates, key=lambda x: x[4])
 
-    claimed  = set()
-    accepted = []
+    claimed      = set()
+    bonded_pairs = set(existing_pairs or [])
+    accepted     = []
 
     for (chain_a, site_a, chain_b, site_b, _) in sorted_candidates:
         if max_bonds is not None and len(accepted) >= max_bonds:
             break
         if (chain_a, site_a) in claimed or (chain_b, site_b) in claimed:
             continue
+
+        pair = frozenset((chain_a, chain_b))
+        if pair in bonded_pairs:
+            continue
+
         accepted.append((chain_a, site_a, chain_b, site_b))
         claimed.add((chain_a, site_a))
         claimed.add((chain_b, site_b))
+        bonded_pairs.add(pair)
 
     return accepted
 

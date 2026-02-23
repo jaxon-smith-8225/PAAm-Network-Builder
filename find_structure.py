@@ -72,15 +72,15 @@ def build_network_attempt(cfg, seed):
     random.seed(seed)
     np.random.seed(seed)
 
-    paam_universe = mda.Universe(
-        cfg['pdb_template'],
-        context='default',
-        to_guess=['elements', 'bonds']
-    )
-    template_cylinder = create_chain_cylinder(paam_universe.atoms)
+    template_cylinders = [
+        create_chain_cylinder(
+            mda.Universe(pdb, context='default', to_guess=['elements', 'bonds']).atoms
+        )
+        for pdb in cfg['pdb_template']
+    ]
 
     box_dims = compute_box_dimensions(
-        template_cylinder,
+        template_cylinders,
         cfg['target_chains'],
         cfg['polymer_volume_fraction']
     )
@@ -100,7 +100,7 @@ def build_network_attempt(cfg, seed):
         remaining = cfg['target_chains'] - network.num_chains()
         batch = min(cfg['batch_size'], remaining)
 
-        new_cyls = pack_batch(network, template_cylinder, batch, box_dims, grid)
+        new_cyls = pack_batch(network, template_cylinders, batch, box_dims, grid)
 
         if not new_cyls:
             continue
@@ -111,7 +111,7 @@ def build_network_attempt(cfg, seed):
         max_bonds = max(1, _bonds_remaining(network, cfg['target_crosslink_density'] * 0.5))
         candidates = find_candidate_bonds(network.cylinders, network.bonded_sites)
         candidates = filter_by_orientation(candidates, network.cylinders)
-        accepted   = resolve_conflicts(candidates, max_bonds=max_bonds)
+        accepted   = resolve_conflicts(candidates, max_bonds=max_bonds, existing_pairs=network.bonded_chain_pairs)
         apply_bonds(network, accepted)
 
         network.remove_unbonded_new(start_id)
@@ -121,7 +121,7 @@ def build_network_attempt(cfg, seed):
     for iteration in range(cfg['max_iterations']):
         bond_iterations += 1
 
-        density_ok     = network.crosslink_density >= cfg['target_crosslink_density']
+        density_ok     = cfg['target_crosslink_density']+0.0015 >= network.crosslink_density >= cfg['target_crosslink_density']-0.0015
         percolation_ok = (not cfg['require_percolation']) or network.is_percolated()
         loops_ok       = network.cycle_rank() >= cfg['target_loops']
 
@@ -174,7 +174,7 @@ def find_structure(cfg=None, num_workers=None):
     """
     if cfg is None:
         cfg = {
-            'pdb_template':             PDB_TEMPLATE,
+            'pdb_templates':            [PDB_TEMPLATE],
             'target_chains':            DEFAULT_CHAIN_COUNT,
             'batch_size':               BATCH_SIZE,
             'max_iterations':           MAX_ITERATIONS,

@@ -105,7 +105,8 @@ def show_cylinders(network, show_bonds=True, highlight_cycles=True):
     ax.set_title(
         f'Polymer Network — {network.num_chains()} chains, '
         f'{len(network.bonds)} bonds, '
-        f'cycle rank {network.cycle_rank()}'
+        f'cycle rank {network.cycle_rank()}, '
+        f'crosslink density {network.crosslink_density * 100:.2f}%'
     )
 
     # Legend entries for the thicker-line convention

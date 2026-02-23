@@ -242,6 +242,11 @@ class CylinderNetwork:
         if total == 0:
             return 0.0
         return len(self.bonded_sites) / total
+    
+    @property
+    def bonded_chain_pairs(self):
+        """Set of frozensets of chain ID pairs that already share a crosslink."""
+        return {frozenset((a, b)) for (a, _, b, _) in self.bonds}
 
     def is_percolated(self):
         """

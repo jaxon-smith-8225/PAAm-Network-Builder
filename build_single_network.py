@@ -66,9 +66,10 @@ def parse_args():
         help='Number of parallel workers (default: CPU count)'
     )
     parser.add_argument(
-        '--pdb', type=str, default=PDB_TEMPLATE,
-        help=f'PDB template file (default: {PDB_TEMPLATE})'
+        '--pdb', type=str, nargs='+', default=PDB_TEMPLATE,
+        help='One or more PDB template files (space-separated)'
     )
+
     return parser.parse_args()
 
 
@@ -76,7 +77,7 @@ def main():
     args = parse_args()
 
     cfg = {
-        'pdb_template':             args.pdb,
+        'pdb_template':            args.pdb,
         'target_chains':            args.chains,
         'batch_size':               BATCH_SIZE,
         'max_iterations':           MAX_ITERATIONS,

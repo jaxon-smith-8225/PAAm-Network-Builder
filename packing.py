@@ -11,6 +11,7 @@ vector approach
 
 import math
 from collections import defaultdict
+import random
 
 import numpy as np
 from scipy.spatial.transform import Rotation
@@ -115,7 +116,7 @@ class SpatialGrid:
 
 # Public API
 
-def compute_box_dimensions(template_cylinder, n_chains, phi):
+def compute_box_dimensions(template_cylinders, n_chains, phi):
     """
     Compute cubic simulation box dimensions from chain count and volume fraction
 
@@ -129,9 +130,12 @@ def compute_box_dimensions(template_cylinder, n_chains, phi):
     Returns:
         np.ndarray([Lx, Ly, Lz]) in Angstroms
     """
-    chain_volume = math.pi * CHAIN_RADIUS ** 2 * template_cylinder.length
-    box_volume   = (n_chains * chain_volume) / phi
-    side         = box_volume ** (1.0 / 3.0)
+    avg_volume = np.mean([
+        math.pi * CHAIN_RADIUS ** 2 * t.length
+        for t in template_cylinders
+    ])
+    box_volume = (n_chains * avg_volume) / phi
+    side = box_volume ** (1.0 / 3.0)
     return np.array([side, side, side])
 
 
@@ -154,7 +158,7 @@ def random_orientation(template_cylinder):
     return cyl
 
 
-def pack_batch(network, template_cylinder, batch_size, box_dims, grid):
+def pack_batch(network, template_cylinders, batch_size, box_dims, grid):
     """
     Place up to batch_size cylinders randomly in the box using grid acceleration
 
@@ -179,14 +183,14 @@ def pack_batch(network, template_cylinder, batch_size, box_dims, grid):
     """
     placed = []
     max_attempts = batch_size * 30
-
     attempts = 0
+
     while len(placed) < batch_size and attempts < max_attempts:
         attempts += 1
 
-        cyl = random_orientation(template_cylinder)
+        template = random.choice(template_cylinders)   # <-- random size pick
+        cyl = random_orientation(template)
 
-        # Place centroid (midpoint of axis) at a random position in the box
         centroid = (cyl.start + cyl.end) / 2.0
         random_pos = np.random.uniform(np.zeros(3), box_dims)
         cyl.translate(random_pos - centroid)
