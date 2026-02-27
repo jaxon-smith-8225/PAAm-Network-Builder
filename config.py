@@ -55,4 +55,4 @@ DEFAULT_CHAIN_COUNT = 25   # Target number of chains in the final network
 
 # PDB template for the PAAm chain
 # PDB_TEMPLATE = ["PAAm25mer.pdb", "PAAm30mer.pdb", "PAAm35mer.pdb"]
-PDB_TEMPLATE = ["PAAm25mer.pdb", "PAAm30mer.pdb", "PAAm35mer.pdb", "PAAm40mer.pdb", "PAAm45mer.pdb", "PAAm50mer.pdb"]
+PDB_TEMPLATE = ["./pdbtemplates/PAAm25mer.pdb", "./pdbtemplates/PAAm30mer.pdb", "./pdbtemplates/PAAm35mer.pdb", "./pdbtemplates/PAAm40mer.pdb", "./pdbtemplates/PAAm45mer.pdb", "./pdbtemplates/PAAm50mer.pdb"]
