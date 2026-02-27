@@ -191,7 +191,7 @@ def run_analysis(target_densities=TARGET_DENSITIES, n_chains=N_CHAINS):
             'target_crosslink_density': density,
             'polymer_volume_fraction':  POLYMER_VOLUME_FRACTION,
             'require_percolation':      True,
-            'target_loops':             3,    # relax loop requirement for low densities
+            'target_loops':             3
         }
 
         network, stats = find_structure(cfg)
