@@ -16,8 +16,8 @@ import random
 import numpy as np
 from scipy.spatial.transform import Rotation
 
-from geometry_utils import cylinders_collide, segment_segment_distance
-from config import CHAIN_RADIUS
+from .geometry_utils import cylinders_collide, segment_segment_distance
+from .config import CHAIN_RADIUS
 
 
 # Spatial grid

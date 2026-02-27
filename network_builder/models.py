@@ -2,12 +2,12 @@
 
 import numpy as np
 import networkx as nx
-from geometry_utils import (
+from .geometry_utils import (
     rotate_points,
     angle_between_vectors,
     cylinders_collide
 )
-from config import CHAIN_RADIUS
+from .config import CHAIN_RADIUS
 
 
 class ChainCylinder:

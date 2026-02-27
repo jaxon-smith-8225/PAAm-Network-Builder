@@ -24,11 +24,11 @@ warnings.filterwarnings('ignore')
 import multiprocessing
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
-from models import CylinderNetwork
-from chain_analysis import create_chain_cylinder
-from packing import compute_box_dimensions, pack_batch, build_grid
-from bonding import find_candidate_bonds, filter_by_orientation, resolve_conflicts, apply_bonds
-from config import (
+from .models import CylinderNetwork
+from .chain_analysis import create_chain_cylinder
+from .packing import compute_box_dimensions, pack_batch, build_grid
+from .bonding import find_candidate_bonds, filter_by_orientation, resolve_conflicts, apply_bonds
+from .config import (
     PDB_TEMPLATE,
     DEFAULT_CHAIN_COUNT,
     BATCH_SIZE,

@@ -14,7 +14,7 @@ Candidate format adds a distance field:
 
 import numpy as np
 from scipy.spatial import cKDTree
-from config import BOND_SEARCH_RADIUS, MIN_RADIAL_DOT_PRODUCT
+from .config import BOND_SEARCH_RADIUS, MIN_RADIAL_DOT_PRODUCT
 
 
 def find_candidate_bonds(cylinders, bonded_sites):

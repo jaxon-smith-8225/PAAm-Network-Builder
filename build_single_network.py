@@ -23,9 +23,9 @@ python main.py --workers 4
 import time
 import argparse
 
-from find_structure import find_structure
-from viz import show_cylinders
-from config import (
+from network_builder.find_structure import find_structure
+from network_builder.viz import show_cylinders
+from network_builder.config import (
     DEFAULT_CHAIN_COUNT,
     BATCH_SIZE,
     MAX_ITERATIONS,

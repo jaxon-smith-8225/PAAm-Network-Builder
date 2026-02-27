@@ -1,8 +1,8 @@
 """Functions for analyzing polymer chains and creating cylinder representations"""
 
 import numpy as np
-from models import ChainCylinder
-from config import CHAIN_RADIUS
+from .models import ChainCylinder
+from .config import CHAIN_RADIUS
 
 
 def scan_chain(universe):

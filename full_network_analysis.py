@@ -23,8 +23,8 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from scipy.optimize import brentq
 
-from find_structure import find_structure
-from config import (
+from network_builder.find_structure import find_structure
+from network_builder.config import (
     BATCH_SIZE,
     MAX_ITERATIONS,
     POLYMER_VOLUME_FRACTION,
